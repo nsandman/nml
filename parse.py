@@ -32,12 +32,16 @@ for a in y:
 			a = '</' + element.pop(len(element) - 1) + '>'
 	else:
 		if bracketize:
+			t = str()
+			d = a.split('.')
+			if len(d) != 1:
+				t = d[1]
 			if a.startswith('#'):
 				a = '!-- ' + a[1:] + ' --'
 				already = True
 			elif a.startswith('body') or a.startswith('nml') or a.startswith('head'):
 				already = True
-			f = re.findall('(?<="|\')\w+(?="|\')+', a)
+			f = re.findall('(?<="|\')\w+(?="|\')', a)			
 			if len(f) == 0:
 				if a not in notclose:
 					a = '<' + a + '>'
@@ -46,7 +50,7 @@ for a in y:
 				else:
 					a = '<' + a + ' />'
 			else:
-				a = '<' + a.split()[0] + '>' + f[0] + '</' + a.split()[0] + '>'
+				a = '<' + a.split()[0] + ' ' + t.strip() + '>' + f[0] + '</' + a.split()[0] + '>'
 	result += a
 	times += 1
 result += '</html>'

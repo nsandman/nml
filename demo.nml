@@ -15,5 +15,5 @@ nml
 	body
 		h1 'hello'
 		hr
-		h2 'world' : style 'color: red;' : id 'heading2'
+		h2 'world' . style='color: red;' id='heading2'
 	%
