@@ -16,7 +16,6 @@ $body
 		h1 'Hello World'	
 	%
 %
-
 ```
 
 This looks simple, and it is. It will compile into this (without the whitespace):
@@ -56,11 +55,11 @@ or even:
 Finally, because the NML parser is token-based, whitespace does *not* matter. Again, indenting is preferred (as well as new tags on new lines), but not necessary. This is part of NML's flexibilities.
 
 ###Changes
-NML does change a few things in HTML. The only ones so far are including stylesheets and javascript. Here is how you do this in NML (where "..." is a URL). And of course, some of these tags must be closed.
+NML does change a few things in HTML. The only ones so far are including stylesheets and javascript. Here is how you do this in NML. And of course, some of these tags must be closed.
 
-|  | HTML | NML |
-|-----------|:----------------------------------------------------:|:-:
-| **Inline JS** | `<script type="text/javascript">` | `$js` |
-| **Include JS** | `<script type="text/javascript" src="..."></script>` | `js ...` |
-| **Inline CSS** | `<style type="text/css">` | `$css` |
-| **Include CSS** | `<link rel="stylesheet" type="text/css" href="..." />` | `css ...` |
+||HTML|NML|
+|-|:-:|:-:
+|**Inline JS**|`<script type="text/javascript">...</script>`|`$js...%`
+|**Include JS**|`<script type="text/javascript" src="..."></script>`|`js ...`
+|**Inline CSS**|`<style type="text/css">...</style>`|`$css...%`
+|**Include CSS**|`<link rel="stylesheet" type="text/css" href="..." />`|`css ...`
