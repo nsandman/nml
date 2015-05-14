@@ -59,7 +59,7 @@ NML does change a few things in HTML. The only ones so far are including stylesh
 
 | | HTML | NML |
 | - | :-: | :-:
-|**Inline JS**|`<script type="text/javascript">...</script>`|`$js...%`
-|**Include JS**|`<script type="text/javascript" src="..."></script>`|`js ...`
-|**Inline CSS**|`<style type="text/css">...</style>`|`$css...%`
-|**Include CSS**|`<link rel="stylesheet" type="text/css" href="..." />`|`css ...`
+| **Inline JS** | `<script type="text/javascript">...</script>` | `$js...%`
+| **Include JS** | `<script type="text/javascript" src="..."></script>` | `js ...`
+| **Inline CSS** | `<style type="text/css">...</style>` | `$css...%`
+| **Include CSS** | `<link rel="stylesheet" type="text/css" href="..." />` | `css ...`
