@@ -1,8 +1,21 @@
-#Short README (for now)
-To start, run:
+#NML
+NML is a simple preprocessor for HTML that makes it easier to write. In this document, you will learn how to write and read it. You can also read "parse.py" if you want to learn how it is parsed.
 
-```bash
-./parse.py [infile] [outfile]
+##Sample NML Page
+NML is just an HTML preprocessor. This means that it is "compiled" into plain HTML.
+
+Here is an example.
+
+```
+$nml
+	$head
+		title 'Hello World'
+	%
+	$body
+		h1 'Hello World'
+	%
+%
+
 ```
 
-This will work with Python 2.7 (not tested with below, but probably other lower versions too) and Python 3.
+This looks simple, and it is.
