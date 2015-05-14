@@ -57,8 +57,8 @@ Finally, because the NML parser is token-based, whitespace does *not* matter. Ag
 ###Changes
 NML does change a few things in HTML. The only ones so far are including stylesheets and javascript. Here is how you do this in NML. And of course, some of these tags must be closed.
 
-||HTML|NML|
-|-|:-:|:-:
+| | HTML | NML |
+| - | :-: | :-:
 |**Inline JS**|`<script type="text/javascript">...</script>`|`$js...%`
 |**Include JS**|`<script type="text/javascript" src="..."></script>`|`js ...`
 |**Inline CSS**|`<style type="text/css">...</style>`|`$css...%`
