@@ -1,19 +1,5 @@
-nml
-	head
-		title 'testing'
-		js from http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
-		js
-			alert('hi');
-		%
-		css from https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css
-		css
-			h1 {
-				color: green;
-			}
-		%
-	%
-	body
-		h1 'hello'
-		hr
-		h2 'world' . style='color: red;' id='heading2'
-	%
+$head
+	@title "Testing"
+% $body
+	@h1 (id: hi) "Hello, world!"
+%
