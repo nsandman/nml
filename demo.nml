@@ -1,5 +1,10 @@
+&hello = demo_macro
+
 $head
 	@title "Testing"
-% $body
-	@h1 (id: hi) "Hello, world!"
+	@css "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+%
+$body
+	@h1 (id: {hello}) "Hello, world!"
+	# This is a comment!
 %

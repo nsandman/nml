@@ -30,9 +30,34 @@ def match_quote(str):
 	else:
 		return False
 
+def minify(x):
+	# Delete unnecessary spaces in order to decrease file size (and memory used)
+	for (a, b) in enumerate(x):
+		if "\n" in b or "\t" in b:
+			del x[a]
+	return "".join(x)
+
+def preprocess(string):
+	new_string = string.split("\n")		# Split by line
+	replace_list_huge = []					# List of replace_list_smalls
+	to_del = []
+	for (a, b) in enumerate(new_string):
+		if b.startswith("&"):			# Preprocessor macros are denoted by the "&" character
+			replace_list_small = b.split("=")
+			replace_list_small[0] = replace_list_small[0].replace("&", "").strip()	# Remove "&" from macro definition
+			replace_list_small[1] = replace_list_small[1].strip()						# Strip whitespace
+			replace_list_huge.append(replace_list_small)
+			to_del.append(b)						# Delete the macro from the buffer before feeding it to parse()
+	for (c, d) in enumerate(replace_list_huge):
+		exec("""for (p, z) in enumerate(new_string):
+				new_string[p] = z.format(%s="%s")""" % (d[0], d[1]))
+	for h in to_del:
+		del new_string[new_string.index(h)]
+	return "\n".join(new_string)		# Join the preprocessed string
+
 # It takes one argument, which is a file object. For some reason, passing argv[1]
 # as the file name caused an error.
-def parse_nml(file):
+def parse(file):
 	tokens = str()
 	# "buffer" is, predictably, the buffer that actually holds the output. It's
 	# an array because Python strings are non-mutable; so, in order to modify it
@@ -50,8 +75,11 @@ def parse_nml(file):
 	cfs = False
 	# Ignore quotes
 	iq = True
+	# End comment on newline
+	ce = False
+	css = False
 	buffer.append("<!DOCTYPE html><html>")		# Always start with the doctype (and html tag)!
-	for a in file.read():
+	for a in file:
 		if a is "$":
 			# Replace "$" with "<" and set the ws flag.
 			buffer.append("<")
@@ -107,28 +135,26 @@ def parse_nml(file):
 			buffer.append('">')	# Close quotes for the last attribute when attributes are closed
 		elif a is "%":
 			buffer.append("</%s>" % open.pop())
+		elif a is "#":
+			# Replace a "#" with "<!--" (The start of an HTML comment)
+			# OR, if --comment-strip is specified, delete it
+			buffer.append("<!--")
+			ce = True
+		elif ce and "\n" in a:
+			buffer.append("-->")
+			ce = False
 		else:
 			# If the whitespace isn't marked as significant through the
 			# use of the "ws" flag, don't add it to the buffer!
 			if not ws or not match("\s", a): buffer.append(a)
 		# Don't add "$" or "@" to the tag name, otherwise you'd get </$body> or </@h1>
 		if (ws or ws2) and a is not "$" and a is not "@": tokens += a
-	return "".join(buffer)+"</html>"		# Make "buffer" a string and close the "html" tag from the beginning
-	file.close()
+	return (minify(buffer) + "</html>")		# Make "buffer" a string and close the "html" tag from the beginning
 
 if argc is 2:
-	# If there's only one argument, print the parsed file to stdout.
-	print parse_nml(open(argv[1], "r"))
-elif argc is 3:
-	# Also, if the outfile is "-", output to stdout.
-	if argv[2] is "-":
-		print parse_nml(open(argv[1], "r"))
-	else:
-		# Else, write to the file with the name specified by argv[2].
-		f = open(argv[2], "w")
-		f.write(parse_nml(open(argv[1], "r")))
-		f.close()
+	m = open(argv[1], "r")
+	print parse(preprocess(m.read()))
+	m.close()
 else:
 	# Print the help message
-	print "\033[1mUsage:\033[0m %s [infile] [outfile]" % argv[0]
-	print "Or, to print to stdout, use %s [infile] or %s [infile] -" % (argv[0], argv[0])
+	print "\033[1mUsage:\033[0m %s [file]" % argv[0]
