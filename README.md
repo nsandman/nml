@@ -11,8 +11,7 @@ $head
 	title 'Hello World'
 %
 $body
-	$div
-		&id: content
+	$div (id: content)
 		h1 'Hello World'	
 	%
 %
@@ -37,20 +36,10 @@ This looks simple, and it is. It will compile into this (without the whitespace)
 It's quite simple, and it boils down to this:
 
 1. Tags that start with the "$" token will be closed at the corresponding "%" token.
-2. Tags that start with the "&" token are attributes of their parent.
-3. Tags that do not start with a special token are closed on the same line with their value in between.
+2. Currently being implemented: The "&" token signifies a macro (Which you can also think of as a variable)
+3. Tags that start with the "@" token are closed on the same line with their value (If there is one) in between.
 
-The example above is the *preferred* syntax for NML, but it is not the only way. The parser does not discriminate between single `'` and double `"` quotes. Also, you may quote any part of the attributes. Using the example above, this would have been:
-
-```
-&id: 'content'
-```
-
-or even:
-
-```
-&'id': 'content'
-```
+The example above is the *preferred* syntax for NML, but it is not the only way. The parser does not discriminate between single `'` and double `"` quotes.
 
 Finally, because the NML parser is token-based, whitespace does *not* matter. Again, indenting is preferred (as well as new tags on new lines), but not necessary. This is part of NML's flexibilities.
 
