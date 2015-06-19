@@ -37,7 +37,7 @@ It's quite simple, and it boils down to this:
 
 1. Tags that start with the "$" token will be closed at the corresponding "%" token.
 2. Currently being implemented: The "&" token signifies a macro (Which you can also think of as a variable)
-3. Tags that do not start with a special token are closed on the same line with their value (If there is one) in between.
+3. Tags that start with the "@" token are closed on the same line with their value (If there is one) in between.
 
 The example above is the *preferred* syntax for NML, but it is not the only way. The parser does not discriminate between single `'` and double `"` quotes.
 
