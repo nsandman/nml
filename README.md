@@ -52,3 +52,15 @@ NML does change a few things in HTML. The only ones so far are including stylesh
 | **Include JS** | `<script type="text/javascript" src="..."></script>` | `js ...`
 | **Inline CSS** | `<style type="text/css">...</style>` | `$css...%`
 | **Include CSS** | `<link rel="stylesheet" type="text/css" href="..." />` | `css ...`
+
+###Parser Usage
+Using the parser is simple. The syntax is literally just:
+
+```
+./parser.py [infile]
+```
+
+So how do you write to a file? Simple. Just direct the program's stdout to your path:
+```
+./parser.py [infile] > [outfile]
+```
