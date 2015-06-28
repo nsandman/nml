@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 #coding=utf-8
 
 # This is a (probably pretty bad) reference implementation
@@ -34,7 +34,7 @@ def minify(x):
 	# Delete unnecessary spaces in order to decrease file size (and memory used)
 	for (a, b) in enumerate(x):
 		if "\n" in b or "\t" in b:
-			del x[a]
+			x[a] = b.strip()
 	return "".join(x)
 
 def preprocess(string):
@@ -42,15 +42,40 @@ def preprocess(string):
 	replace_list_huge = []					# List of replace_list_smalls
 	to_del = []
 	for (a, b) in enumerate(new_string):
-		if b.startswith("&"):			# Preprocessor macros are denoted by the "&" character
-			replace_list_small = b.split("=")
-			replace_list_small[0] = replace_list_small[0].replace("&", "").strip()	# Remove "&" from macro definition
-			replace_list_small[1] = replace_list_small[1].strip()						# Strip whitespace
-			replace_list_huge.append(replace_list_small)
-			to_del.append(b)						# Delete the macro from the buffer before feeding it to parse()
+		b = new_string[a] = b.strip().replace("true", "1").replace("false", "0")
+		if b.startswith("&"):
+			if "=" in b:			# Preprocessor macros are denoted by the "&" character
+				replace_list_small = b.split("=")
+				replace_list_small[0] = replace_list_small[0].replace("&", "").strip()	# Remove "&" from macro definition
+				replace_list_small[1] = replace_list_small[1].strip()						# Strip whitespace
+				replace_list_huge.append(replace_list_small)
+				to_del.append(b)						# Delete the macro from the buffer before feeding it to parse()
+			elif "if" in b and "endif" not in b:
+				test = False
+				exec("""if %s: test = True""" % b[4:])
+				q = a
+				deleted = False
+				u = q-a
+				while True:
+					if test:
+						u = a-q
+					if new_string[q-(u)].strip().startswith("&endif"):
+						del new_string[q-(q-a)]
+						if test:
+							del new_string[(q-(q-a))+1]
+						break
+					if q is a:
+						deleted = True
+						del new_string[q]
+					if not test:
+						if not test:
+							del new_string[q-(q-a)]
+						else:
+							del new_string[q]
+					u += 1
+					q += 1
 	for (c, d) in enumerate(replace_list_huge):
-		exec("""for (p, z) in enumerate(new_string):
-				new_string[p] = z.format(%s="%s")""" % (d[0], d[1]))
+		exec("""for (p, z) in enumerate(new_string): new_string[p] = z.format(%s="%s")""" % (d[0], d[1]))
 	for h in to_del:
 		del new_string[new_string.index(h)]
 	return "\n".join(new_string)		# Join the preprocessed string
@@ -63,7 +88,7 @@ def parse(file):
 	# an array because Python strings are non-mutable; so, in order to modify it
 	# as it's being parsed, it has to be a list.
 	buffer = []
-	open = ["head", "body"]
+	open = []
 	# Close tag on whitespace?
 	ws = False
 	# Same as ws, but for "@" tags.
@@ -151,10 +176,13 @@ def parse(file):
 		if (ws or ws2) and a is not "$" and a is not "@": tokens += a
 	return (minify(buffer) + "</html>")		# Make "buffer" a string and close the "html" tag from the beginning
 
-if argc is 2:
-	m = open(argv[1], "r")
-	print parse(preprocess(m.read()))
-	m.close()
-else:
-	# Print the help message
-	print "\033[1mUsage:\033[0m %s [file]" % argv[0]
+def main():
+	if argc is 2:
+		m = open(argv[1], "r")
+		print parse(preprocess(m.read()))
+		m.close()
+	else:
+		# Print the help message
+		print "\033[1mUsage:\033[0m %s [file]" % argv[0]
+
+main()
